@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
 
-function Hello() {
-  useEffect(() => {
-    console.log("created");
-    return () => console.log("destroyed :"); // cleanUp function, component가 destroy될 때 어떤한 행동을 할 수 있도록
-  }, []);
-  return <h1>Hello</h1>;
-}
-
 function App() {
-  const [showing, setShowing] = useState(false);
-  const onClick = () => {
-    setShowing((prev) => !prev);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (evnet) => setToDo(evnet.target.value);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (toDo === "") {
+      return;
+    }
+    setToDos((currentArray) => [...currentArray, toDo]);
+    setToDo("");
   };
+
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
+      <h1>My To Dos({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          onChange={onChange}
+          value={toDo}
+          type="text"
+          placeholder="write the words"
+        />
+        <button>Add To Do</button>
+      </form>
     </div>
   );
 }
